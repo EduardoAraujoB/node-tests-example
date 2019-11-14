@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "build": "sucrase ./src -d ./dist --transforms imports",
-    "test": "jest"
+    "test": "NODE_ENV=test jest"
   },
   "dependencies": {
     "dotenv": "^8.0.0",
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@sucrase/jest-plugin": "^2.0.0",
+    "@types/jest": "^24.0.23",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-prettier": "^6.0.0",
