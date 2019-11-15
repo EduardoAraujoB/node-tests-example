@@ -2,7 +2,7 @@ import request from 'supertest';
 import bcrypt from 'bcryptjs';
 import app from '../../src/app';
 
-import User from '../../src/app/models/User';
+import factory from '../factories';
 import truncate from '../util/truncate';
 
 describe('User', () => {
@@ -11,9 +11,7 @@ describe('User', () => {
   });
 
   it('should be encript user password when a new user is created', async () => {
-    const user = await User.create({
-      name: 'Eduardo Araujo',
-      email: 'ea0123450@gmail.com',
+    const user = await factory.create('User', {
       password: '123456',
     });
 
@@ -23,33 +21,25 @@ describe('User', () => {
   });
 
   it('should be able to register', async () => {
+    const user = await factory.attrs('User');
+
     const response = await request(app)
       .post('/users')
-      .send({
-        name: 'Eduardo Araujo',
-        email: 'ea0123450@gmail.com',
-        password: '123456',
-      });
+      .send(user);
 
     expect(response.body).toHaveProperty('id');
   });
 
   it('should be not be able to register with duplicated email', async () => {
+    const user = await factory.attrs('User');
+
     await request(app)
       .post('/users')
-      .send({
-        name: 'Eduardo Araujo',
-        email: 'ea0123450@gmail.com',
-        password: '123456',
-      });
+      .send(user);
 
     const response = await request(app)
       .post('/users')
-      .send({
-        name: 'Eduardo Araujo',
-        email: 'ea0123450@gmail.com',
-        password_hash: '123456',
-      });
+      .send(user);
 
     expect(response.status).toBe(400);
   });
